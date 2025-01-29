@@ -1,54 +1,41 @@
-import {useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
+import useForm from '~/hooks/useForm';
+import CustomButton from '~/components/CustomButton';
 import InputField from '~/components/InputField';
+import {validateLogin} from '~/utils';
 
 const LoginScreen = () => {
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
+  const login = useForm({
+    initialValue: {email: '', password: ''},
+    validate: validateLogin,
   });
 
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false,
-  });
-
-  const handleChangeValues = (name: string, text: string) => {
-    setValues({
-      ...values,
-      [name]: text,
-    });
-  };
-
-  const handleBlur = (name: string) => {
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-  };
+  const handleSubmit = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <InputField
           placeholder="이메일"
-          error={'이메일을 입력하세요.'}
+          error={login.errors.email}
           inputMode="email"
-          touched={touched.email}
-          value={values.email}
-          onChangeText={text => handleChangeValues('email', text)}
-          onBlur={() => handleBlur('email')}
+          touched={login.touched.email}
+          {...login.getTextInputProps('email')}
         />
         <InputField
           placeholder="비밀번호"
-          error={'비밀번호를 입력하세요.'}
+          error={login.errors.password}
           secureTextEntry
-          touched={touched.password}
-          value={values.password}
-          onChangeText={text => handleChangeValues('password', text)}
-          onBlur={() => handleBlur('password')}
+          touched={login.touched.password}
+          {...login.getTextInputProps('password')}
         />
       </View>
+      <CustomButton
+        label="로그인"
+        variant="filled"
+        size="large"
+        onPress={handleSubmit}
+      />
     </SafeAreaView>
   );
 };
@@ -60,6 +47,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: 20,
+    marginBottom: 30,
   },
 });
 
