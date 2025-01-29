@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {ForwardedRef, forwardRef, useRef} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 import {colors} from '~/constants';
+import {mergeRefs} from '~/utils';
 
 interface InputFieldProps extends TextInputProps {
   disabled?: boolean;
@@ -18,40 +19,40 @@ interface InputFieldProps extends TextInputProps {
 
 const deviceHeight = Dimensions.get('screen').height;
 
-const InputField = ({
-  disabled = false,
-  touched,
-  error,
-  ...props
-}: InputFieldProps) => {
-  const innerRef = useRef<TextInput | null>(null);
+const InputField = forwardRef(
+  (
+    {disabled = false, touched, error, ...props}: InputFieldProps,
+    ref?: ForwardedRef<TextInput>,
+  ) => {
+    const innerRef = useRef<TextInput | null>(null);
 
-  const handlePressInput = () => {
-    innerRef.current?.focus();
-  };
-  return (
-    <Pressable onPress={handlePressInput}>
-      <View
-        style={[
-          styles.container,
-          disabled && styles.disabled,
-          touched && !!error && styles.inputError,
-        ]}>
-        <TextInput
-          ref={innerRef}
-          editable={!disabled}
-          placeholderTextColor={colors.GRAY_500}
-          style={[styles.input, disabled && styles.disabled]}
-          autoCapitalize="none" // 자동 대문자 방지
-          spellCheck={false}
-          autoCorrect={false}
-          {...props}
-        />
-        {touched && !!error && <Text style={styles.errorText}>{error}</Text>}
-      </View>
-    </Pressable>
-  );
-};
+    const handlePressInput = () => {
+      innerRef.current?.focus();
+    };
+    return (
+      <Pressable onPress={handlePressInput}>
+        <View
+          style={[
+            styles.container,
+            disabled && styles.disabled,
+            touched && !!error && styles.inputError,
+          ]}>
+          <TextInput
+            ref={ref ? mergeRefs(innerRef, ref) : innerRef}
+            editable={!disabled}
+            placeholderTextColor={colors.GRAY_500}
+            style={[styles.input, disabled && styles.disabled]}
+            autoCapitalize="none" // 자동 대문자 방지
+            spellCheck={false}
+            autoCorrect={false}
+            {...props}
+          />
+          {touched && !!error && <Text style={styles.errorText}>{error}</Text>}
+        </View>
+      </Pressable>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {
