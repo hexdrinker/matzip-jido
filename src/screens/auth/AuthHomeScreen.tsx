@@ -1,5 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import {Button, SafeAreaView, View} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
+import CustomButton from '~/components/CustomButton';
 import {authNavigations} from '~/constants';
 import {AuthStackParamList} from '~/navigations/stack/AuthStackNavigator';
 
@@ -12,12 +13,14 @@ const AuthHomeScreen = ({navigation}: AuthHomeScreenProps) => {
   return (
     <SafeAreaView>
       <View>
-        <Button
-          title="로그인 화면으로 이동"
+        <CustomButton
+          label="로그인"
+          variant="filled"
           onPress={() => navigation.navigate(authNavigations.LOGIN)}
         />
-        <Button
-          title="회원가입 화면으로 이동"
+        <CustomButton
+          label="회원가입"
+          variant="outlined"
           onPress={() => navigation.navigate(authNavigations.SIGNUP)}
         />
       </View>
