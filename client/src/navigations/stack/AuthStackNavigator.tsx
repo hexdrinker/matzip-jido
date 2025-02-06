@@ -40,6 +40,7 @@ const AuthStackNavigator = () => {
         component={LoginScreen}
         options={{
           headerTitle: '로그인',
+          headerBackTitleStyle: {display: 'none'},
         }}
       />
       <Stack.Screen
@@ -47,6 +48,7 @@ const AuthStackNavigator = () => {
         component={SignupScreen}
         options={{
           headerTitle: '회원가입',
+          headerBackTitleStyle: {display: 'none'},
         }}
       />
     </Stack.Navigator>
