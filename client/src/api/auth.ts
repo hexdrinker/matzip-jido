@@ -1,6 +1,5 @@
 import {Category, Profile} from '~/types/domain';
 import axiosInstance from './axios';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import {getEncryptStorage} from '~/utils';
 
 type RequestUser = {
@@ -23,7 +22,7 @@ const postLogin = async ({
   email,
   password,
 }: RequestUser): Promise<ResponseToken> => {
-  const {data} = await axiosInstance.post('/login', {email, password});
+  const {data} = await axiosInstance.post('/auth/signin', {email, password});
 
   return data;
 };
@@ -48,7 +47,7 @@ const getAccessToken = async (): Promise<ResponseToken> => {
 };
 
 const logout = async () => {
-  await axiosInstance.post('/logout');
+  await axiosInstance.post('/auth/logout');
 };
 
 export {postSignup, postLogin, getProfile, getAccessToken, logout};
